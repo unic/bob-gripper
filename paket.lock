@@ -1,1 +1,7 @@
-
+NUGET
+  remote: https://www.nuget.org/api/v2
+  specs:
+    Pester (3.4)
+  remote: https://teamcity.unic.com/httpAuth/app/nuget/v1/FeedService.svc
+  specs:
+    Unic.Bob.Keith (1.1.0)
