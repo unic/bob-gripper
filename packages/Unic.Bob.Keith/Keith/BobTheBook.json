@@ -1,0 +1,66 @@
+[
+    {
+        "name": "Benny",
+        "url": "https://git.unic.com/scm/scmbob/bob-benny.git",
+        "module": "benny",
+        "modulePath": "src/tools"
+    },
+    {
+        "name": "Dizzy",
+        "url": "https://git.unic.com/scm/scmbob/bob-dizzy.git",
+        "module": "dizzy",
+        "modulePath": "src"
+    },
+    {
+        "name": "Dodger",
+        "url": "https://git.unic.com/scm/scmbob/bob-dodger.git",
+        "module": "dodger",
+        "modulePath": "src/"
+    },
+    {
+        "name": "Lofty",
+        "url": "https://git.unic.com/scm/scmbob/bob-lofty.git",
+        "module": "lofty",
+        "modulePath": "src/"
+    },
+    {
+        "name": "Muck",
+        "url": "https://git.unic.com/scm/scmbob/bob-muck.git",
+        "module": "muck",
+        "modulePath": "src/build"
+    },
+    {
+        "name": "Packer",
+        "url": "https://git.unic.com/scm/scmbob/bob-packer.git",
+        "module": "packer",
+        "modulePath": "src/"
+    },
+    {
+        "name": "Rubble",
+        "url": "https://git.unic.com/scm/scmbob/bob-rubble.git",
+        "module": "rubble",
+        "modulePath": "src/tools"
+    },
+    {
+        "name": "Scoop",
+        "url": "https://git.unic.com/scm/scmbob/bob-scoop.git",
+        "module": "scoop",
+        "modulePath": "src/tools"
+    },
+    {
+        "name": "Wendy",
+        "url": "https://git.unic.com/scm/scmbob/bob-config.git",
+        "module": "bobconfig",
+        "modulePath": "src/tools"
+    },
+    {
+        "name": "Keith",
+        "url": "https://git.unic.com/scm/scmbob/bob-keith.git",
+        "module": "keith",
+        "modulePath": "src/"
+    },
+    {
+        "name": "Travis",
+        "url": "https://git.unic.com/scm/scmbob/bob-travis-framework.git"
+    }
+]
