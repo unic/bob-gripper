@@ -1,2 +1,2 @@
-<div class="chapterlogo">![MyModule](MyModule.jpg)</div>
+<div class="chapterlogo">![Gripper](Gripper.jpg)</div>
 # MyModule
