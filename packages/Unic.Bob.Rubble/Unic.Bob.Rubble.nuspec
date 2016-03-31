@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Unic.Bob.Rubble</id>
+    <version>1.0.2</version>
+    <authors>Unic AG</authors>
+    <owners>Unic AG</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Rubble is internal file system library</description>
+  </metadata>
+</package>
