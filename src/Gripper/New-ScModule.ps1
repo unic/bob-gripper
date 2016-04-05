@@ -31,6 +31,29 @@ function New-ScModule
             Write-Error "Module type, name and whether to create a test project are required."
         }
         
+        $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
+                
+        $solutionFolder = Split-Path -Parent $solutionNode.FullName
+
+        $codeDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/code"
+                
+        mkdir $codeDir | Out-Null
+                
+        $serializationDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/serialization"
+                
+        mkdir $serializationDir | Out-Null
+                
+       switch($createTest.ToLower()) {
+                   
+            {($_ -eq "y") -or ($_ -eq "yes")} { 
+                        
+            $testsDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/Tests"
+
+            mkdir $testsDir | Out-Null
+                                            
+            }
+        }         
+        
         if ($moduleType -eq 'Feature') {
             
             
@@ -45,37 +68,8 @@ function New-ScModule
             
         if ($moduleType -eq 'Project') {
                 
-                $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
-                $solutionFolder = Split-Path -Parent $solutionNode.FullName
                 
-                Write-Verbose $solutionFolder
-                
-                Write-Verbose $titledModuleType
-                
-                $codeDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/code"
-                
-                Write-Verbose $codeDir
-                
-                mkdir $codeDir
-                
-                $serializationDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/serialization"
-                
-                Write-Verbose $serializationDir
-                
-                mkdir $serializationDir
-                
-                switch($createTest.ToLower())
-                {
-                    {($_ -eq "y") -or ($_ -eq "yes")} { 
-                        
-                        $testsDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/Tests"
-                        
-                        Write-Verbose $testsDir
-                        
-                        mkdir $testsDir
-                                                
-                    }
-                } 
-            }    
+                 
+        }    
     }
 }
