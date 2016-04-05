@@ -10,7 +10,7 @@
         <description>Gripper is responsible for creating new modules in projects.</description>
     </metadata>
     <files>
-        <file src="src\**" target="" />
+        <file src="src\**" target="tools" />
         <file src="packages\**" target="tools" exclude="**\package\services\metadata\core-properties\**;**\Unic.Bob.Keith\**;**\pester\**" />
     </files>
 </package>
