@@ -23,7 +23,7 @@ function New-ScModule
         }
         
         $moduleType = Read-Host "Please enter the type of your module ([f]eature, f[o]undation or [p]roject)"
-        $moduleName = Read-Host "Please enter the name of your module (i.e. 'Sitecore.Feature.Identity')"
+        $moduleName = Read-Host "Please enter the short name of your module (i.e. 'Identity')"
         $createTest = Read-Host "Please enter if you want to create a test project for your module ([y]es or [n]o)"
         
         if ([string]::IsNullOrEmpty($moduleType) -or  [string]::IsNullOrEmpty($moduleName) -or [string]::IsNullOrEmpty($createTest))
@@ -47,8 +47,23 @@ function New-ScModule
             
             {($_ -eq "p") -or ($_ -eq "project")} {
                 
-                Install-Package Microsoft.AspNet.Mvc -Version 5.2.3
+                $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
+                $solutionFolder = Split-Path -Parent $solutionNode.FullName
                 
+                $TextInfo = (Get-Culture).TextInfo
+                $titledModuleType = $TextInfo.ToTitleCase($moduleType)
+                
+                mkdir Join-Path $solutionFolder "src/$titledModuleType/$moduleName/code"
+                mkdir Join-Path $solutionFolder "src/$titledModuleType/$moduleName/serialization"
+                
+                switch($createTest.ToLower())
+                {
+                    {($_ -eq "y") -or ($_ -eq "yes")} { 
+                        
+                        mkdir Join-Path $solutionFolder "src/$titledModuleType/$moduleName/Tests"
+                        
+                    }
+                } 
             }
             
             default {
