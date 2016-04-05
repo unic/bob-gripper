@@ -22,7 +22,7 @@ function New-ScModule
             
         }
         
-        $moduleType = Read-Host "Please enter the type of your module ([f]eature, f[o]undation or [p]roject)"
+        $moduleType = Read-Host "Please enter the type of your module ('Feature', 'Foundation' or 'Project')"
         $moduleName = Read-Host "Please enter the short name of your module (i.e. 'Identity')"
         $createTest = Read-Host "Please enter if you want to create a test project for your module ([y]es or [n]o)"
         
@@ -31,29 +31,24 @@ function New-ScModule
             Write-Error "Module type, name and whether to create a test project are required."
         }
         
-        switch($moduleType.ToLower())
-        {
-            {($_ -eq "f") -or ($_ -eq "feature")} { 
-                
-                
-                                                
-            } 
+        if ($moduleType -eq 'Feature') {
             
-            {($_ -eq "o") -or ($_ -eq "foundation")} {
-                
-                                
-                
-            }
             
-            {($_ -eq "p") -or ($_ -eq "project")} {
+            
+        }
+        
+        if($moduleType -eq 'Foundation') {
+            
+            
+            
+        }
+            
+        if ($moduleType -eq 'Project') {
                 
                 $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
                 $solutionFolder = Split-Path -Parent $solutionNode.FullName
                 
                 Write-Verbose $solutionFolder
-                
-                $TextInfo = (Get-Culture).TextInfo
-                $titledModuleType = $TextInfo.ToTitleCase($moduleType)
                 
                 Write-Verbose $titledModuleType
                 
@@ -61,9 +56,13 @@ function New-ScModule
                 
                 Write-Verbose $codeDir
                 
+                mkdir $codeDir
+                
                 $serializationDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/serialization"
                 
                 Write-Verbose $serializationDir
+                
+                mkdir $serializationDir
                 
                 switch($createTest.ToLower())
                 {
@@ -72,16 +71,11 @@ function New-ScModule
                         $testsDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/Tests"
                         
                         Write-Verbose $testsDir
+                        
+                        mkdir $testsDir
                                                 
                     }
                 } 
-            }
-            
-            default {
-                
-                Write-Error "This module type does not exist."
-                
-            } 
-        }      
+            }    
     }
 }
