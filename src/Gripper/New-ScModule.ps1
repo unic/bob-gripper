@@ -50,18 +50,29 @@ function New-ScModule
                 $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
                 $solutionFolder = Split-Path -Parent $solutionNode.FullName
                 
+                Write-Verbose $solutionFolder
+                
                 $TextInfo = (Get-Culture).TextInfo
                 $titledModuleType = $TextInfo.ToTitleCase($moduleType)
                 
-                mkdir Join-Path $solutionFolder "src/$titledModuleType/$moduleName/code"
-                mkdir Join-Path $solutionFolder "src/$titledModuleType/$moduleName/serialization"
+                Write-Verbose $titledModuleType
+                
+                $codeDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/code"
+                
+                Write-Verbose $codeDir
+                
+                $serializationDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/serialization"
+                
+                Write-Verbose $serializationDir
                 
                 switch($createTest.ToLower())
                 {
                     {($_ -eq "y") -or ($_ -eq "yes")} { 
                         
-                        mkdir Join-Path $solutionFolder "src/$titledModuleType/$moduleName/Tests"
+                        $testsDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/Tests"
                         
+                        Write-Verbose $testsDir
+                                                
                     }
                 } 
             }
