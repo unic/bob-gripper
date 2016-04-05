@@ -47,7 +47,7 @@ function New-ScModule
             
             {($_ -eq "p") -or ($_ -eq "project")} {
                 
-                
+                Install-Package Microsoft.AspNet.Mvc -Version 5.2.3
                 
             }
             
