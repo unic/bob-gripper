@@ -52,24 +52,26 @@ function New-ScModule
             mkdir $testsDir | Out-Null
                                             
             }
-        }         
+        }     
+        
+        $moduleTypeVisualStudioFolder = $solutionNode.Projects | where-object { $_.ProjectName -eq $moduleType } | Select -First 1  
+        
+        $moduleNameVisualStudioFolder = $solutionNode.AddSolutionFolder($moduleName)
         
         if ($moduleType -eq 'Feature') {
-            
-            
             
         }
         
         if($moduleType -eq 'Foundation') {
             
-            
-            
         }
             
         if ($moduleType -eq 'Project') {
             
-            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "$solutionName.$moduleName"} -OutputLocation $codeDir | Out-Null          
+            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "$solutionName.$moduleName"} -OutputLocation $codeDir | Out-Null                     
                  
-        }    
+        }
+        
+        $moduleNameVisualStudioFolder.AddFromFile("$codeDir/$solutionName.$moduleName.Website.csproj")
     }
 }
