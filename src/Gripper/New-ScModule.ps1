@@ -22,7 +22,7 @@ function New-ScModule
             
         }
         
-        $sitecoreVersion = Read-Host "Please enter the Sitecore version you want to use (i.e. '8.1.160302.169'))"
+        $sitecoreVersion = Read-Host "Please enter the Sitecore version you want to use (to use the default '8.1.160302.169' just hit enter))"
         $moduleType = Read-Host "Please enter the type of your module ('Feature', 'Foundation' or 'Project')"
         $moduleName = Read-Host "Please enter the short name of your module (i.e. 'Identity')"
         $createTest = Read-Host "Please enter if you want to create a test project for your module ([y]es or [n]o)"       
@@ -30,6 +30,11 @@ function New-ScModule
         if ([string]::IsNullOrEmpty($moduleType) -or  [string]::IsNullOrEmpty($moduleName) -or [string]::IsNullOrEmpty($createTest))
         {
             Write-Error "Module type, name and whether to create a test project are required."
+        }
+        
+        if(!$sitecoreVersion)
+        {
+            $sitecoreVersion = "8.1.160302.169"
         }
         
         $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
@@ -44,20 +49,11 @@ function New-ScModule
                 
         mkdir $serializationDir | Out-Null
                 
-       switch($createTest.ToLower()) {
-                   
-            {($_ -eq "y") -or ($_ -eq "yes")} { 
-                        
-            $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\Tests"
-
-            mkdir $testsDir | Out-Null
-                                            
-            }
-        }     
-        
         $moduleTypeVisualStudioFolder = $solutionNode.Projects | where-object { $_.ProjectName -eq $moduleType } | Select -First 1  
         
         $moduleNameVisualStudioFolder = $moduleTypeVisualStudioFolder.Object.AddSolutionFolder($moduleName)
+        
+        $projectExtensionName = "csproj"
         
         if ($moduleType -eq 'Feature') {
             
@@ -70,7 +66,6 @@ function New-ScModule
         if ($moduleType -eq 'Project') {
             
             $projectName =  "$solutionName.$moduleName.Website"
-            $projectExtensionName = "csproj"
             
             New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "$solutionName.$moduleName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
                  
@@ -85,7 +80,17 @@ function New-ScModule
             Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
             Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
             Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
-            Install-Package Unic.Bob.Muck -ProjectName $projectName | Out-Null
+        }
+        
+        switch($createTest.ToLower()) {
+                   
+            {($_ -eq "y") -or ($_ -eq "yes")} { 
+                        
+            $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\Tests"
+
+            mkdir $testsDir | Out-Null
+                                            
+            }
         }
     }
 }
