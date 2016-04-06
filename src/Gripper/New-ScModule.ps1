@@ -35,11 +35,11 @@ function New-ScModule
                 
         $solutionFolder = Split-Path -Parent $solutionNode.FullName
 
-        $codeDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/code"
+        $codeDir = Join-Path $solutionFolder "src/$moduleType/$moduleName/code"
                 
         mkdir $codeDir | Out-Null
                 
-        $serializationDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/serialization"
+        $serializationDir = Join-Path $solutionFolder "src/$moduleType/$moduleName/serialization"
                 
         mkdir $serializationDir | Out-Null
                 
@@ -47,7 +47,7 @@ function New-ScModule
                    
             {($_ -eq "y") -or ($_ -eq "yes")} { 
                         
-            $testsDir = Join-Path $solutionFolder "src/$titledModuleType/$moduleName/Tests"
+            $testsDir = Join-Path $solutionFolder "src/$moduleType/$moduleName/Tests"
 
             mkdir $testsDir | Out-Null
                                             
