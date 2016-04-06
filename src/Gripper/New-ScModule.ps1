@@ -68,12 +68,16 @@ function New-ScModule
             
         if ($moduleType -eq 'Project') {
             
-            $projectName =  "$solutionName.$moduleName.Website.csproj"
+            $projectName =  "$solutionName.$moduleName.Website"
+            $projectExtensionName = "csproj"
             
             New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "$solutionName.$moduleName"} -OutputLocation $codeDir | Out-Null                     
                  
-            $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName") | Out-Null
+            $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
+            Install-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -Version 1.0.1 -ProjectName $projectName | Out-Null
+            Install-Package Microsoft.Net.Compilers -Version 1.0.0 -ProjectName $projectName | Out-Null
+            Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
             Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.AspNet.WebApi -Version 5.2.3 -ProjectName $projectName | Out-Null
