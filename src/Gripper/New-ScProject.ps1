@@ -40,11 +40,15 @@ function New-ScProject
         $TemplateLocation = (Get-Item (Resolve-Path $TemplateLocation).Path).FullName
 
         if(-not (Test-Path $OutputLocation)) {
-            mkdir $OutputLocation
+            
+            Write-Error "$OutputLocation does not exist"
+            
         }
 
         if((ls $OutputLocation).Length -gt 0) {
+            
             Write-Error "$OutputLocation is not empty."
+            
         }
 
         $OutputLocation = (Get-Item (Resolve-Path $OutputLocation).Path).FullName

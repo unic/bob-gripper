@@ -67,8 +67,8 @@ function New-ScModule
         }
             
         if ($moduleType -eq 'Project') {
-                
-                
+            
+            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "Unic.BLS"} -OutputLocation $codeDir               
                  
         }    
     }
