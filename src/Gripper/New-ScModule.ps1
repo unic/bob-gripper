@@ -32,8 +32,8 @@ function New-ScModule
         }
         
         $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
-                
         $solutionFolder = Split-Path -Parent $solutionNode.FullName
+        $solutionName = [System.IO.Path]::GetFileNameWithoutExtension($solutionNode.FullName)
 
         $codeDir = Join-Path $solutionFolder "src/$moduleType/$moduleName/code"
                 
@@ -68,7 +68,7 @@ function New-ScModule
             
         if ($moduleType -eq 'Project') {
             
-            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "Unic.BLS"} -OutputLocation $codeDir               
+            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "$solutionName.$moduleName"} -OutputLocation $codeDir | Out-Null          
                  
         }    
     }

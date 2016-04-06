@@ -33,7 +33,6 @@ function New-ScProject
         [Hashtable] $Replacements,
         [Parameter(Mandatory=$true)]
         [string] $OutputLocation
-
     )
     Process
     {
