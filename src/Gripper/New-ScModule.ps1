@@ -22,9 +22,10 @@ function New-ScModule
             
         }
         
+        $sitecoreVersion = Read-Host "Please enter the Sitecore version you want to use (i.e. '8.1.160302.169'))"
         $moduleType = Read-Host "Please enter the type of your module ('Feature', 'Foundation' or 'Project')"
         $moduleName = Read-Host "Please enter the short name of your module (i.e. 'Identity')"
-        $createTest = Read-Host "Please enter if you want to create a test project for your module ([y]es or [n]o)"
+        $createTest = Read-Host "Please enter if you want to create a test project for your module ([y]es or [n]o)"       
         
         if ([string]::IsNullOrEmpty($moduleType) -or  [string]::IsNullOrEmpty($moduleName) -or [string]::IsNullOrEmpty($createTest))
         {
@@ -71,7 +72,7 @@ function New-ScModule
             $projectName =  "$solutionName.$moduleName.Website"
             $projectExtensionName = "csproj"
             
-            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "$solutionName.$moduleName"} -OutputLocation $codeDir | Out-Null                     
+            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "$solutionName.$moduleName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
@@ -81,6 +82,10 @@ function New-ScModule
             Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.AspNet.WebApi -Version 5.2.3 -ProjectName $projectName | Out-Null
+            Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            Install-Package Unic.Bob.Muck -ProjectName $projectName | Out-Null
         }
     }
 }
