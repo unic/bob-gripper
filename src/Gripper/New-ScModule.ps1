@@ -56,7 +56,7 @@ function New-ScModule
         
         $moduleTypeVisualStudioFolder = $solutionNode.Projects | where-object { $_.ProjectName -eq $moduleType } | Select -First 1  
         
-        $moduleNameVisualStudioFolder = $solutionNode.AddSolutionFolder($moduleName)
+        $moduleNameVisualStudioFolder = $moduleTypeVisualStudioFolder.AddSolutionFolder($moduleName)
         
         if ($moduleType -eq 'Feature') {
             
