@@ -35,11 +35,11 @@ function New-ScModule
         $solutionFolder = Split-Path -Parent $solutionNode.FullName
         $solutionName = [System.IO.Path]::GetFileNameWithoutExtension($solutionNode.FullName)
 
-        $codeDir = Join-Path $solutionFolder "src/$moduleType/$moduleName/code"
+        $codeDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\code"
                 
         mkdir $codeDir | Out-Null
                 
-        $serializationDir = Join-Path $solutionFolder "src/$moduleType/$moduleName/serialization"
+        $serializationDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\serialization"
                 
         mkdir $serializationDir | Out-Null
                 
@@ -47,7 +47,7 @@ function New-ScModule
                    
             {($_ -eq "y") -or ($_ -eq "yes")} { 
                         
-            $testsDir = Join-Path $solutionFolder "src/$moduleType/$moduleName/Tests"
+            $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\Tests"
 
             mkdir $testsDir | Out-Null
                                             
@@ -68,10 +68,15 @@ function New-ScModule
             
         if ($moduleType -eq 'Project') {
             
+            $projectName =  "$solutionName.$moduleName.Website.csproj"
+            
             New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "$solutionName.$moduleName"} -OutputLocation $codeDir | Out-Null                     
                  
+            $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName") | Out-Null
+            
+            Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
+            Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
+            Install-Package Microsoft.AspNet.WebApi -Version 5.2.3 -ProjectName $projectName | Out-Null
         }
-        
-        $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir/$solutionName.$moduleName.Website.csproj")
     }
 }
