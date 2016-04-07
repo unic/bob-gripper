@@ -57,15 +57,7 @@ function New-ScModule
         
         if ($moduleType -eq 'Feature') {
             
-        }
-        
-        if($moduleType -eq 'Foundation') {
-            
-        }
-            
-        if ($moduleType -eq 'Project') {
-            
-            $projectName =  "$solutionName.$moduleName.Website"
+            $projectName =  "$solutionName.$moduleType.$moduleName"
             
             New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "$solutionName.$moduleName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
                  
@@ -74,6 +66,41 @@ function New-ScModule
             Install-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -Version 1.0.1 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.Net.Compilers -Version 1.0.0 -ProjectName $projectName | Out-Null
             Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
+            Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
+            Install-Package Microsoft.AspNet.WebApi -Version 5.2.3 -ProjectName $projectName | Out-Null
+            Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            
+        }
+        
+        if($moduleType -eq 'Foundation') {
+            
+            $projectName =  "$solutionName.$moduleType.$moduleName"
+            
+            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Foundation -Replacements @{"ProjectName" = "$projectName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
+                 
+            $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
+            
+            Install-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -Version 1.0.1 -ProjectName $projectName | Out-Null
+            Install-Package Microsoft.Net.Compilers -Version 1.0.0 -ProjectName $projectName | Out-Null
+            Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
+            Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
+            Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+        }
+            
+        if ($moduleType -eq 'Project') {
+            
+            $projectName =  "$solutionName.$moduleName.Website"
+            
+            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Project -Replacements @{"ProjectName" = "$projectName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
+                 
+            $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
+            
+            Install-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -Version 1.0.1 -ProjectName $projectName | Out-Null
+            Install-Package Microsoft.Net.Compilers -Version 1.0.0 -ProjectName $projectName | Out-Null
             Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.AspNet.WebApi -Version 5.2.3 -ProjectName $projectName | Out-Null
