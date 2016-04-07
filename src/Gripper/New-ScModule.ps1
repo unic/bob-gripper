@@ -59,7 +59,7 @@ function New-ScModule
             
             $projectName =  "$solutionName.$moduleType.$moduleName"
             
-            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\WebsiteProject -Replacements @{"ProjectName" = "$solutionName.$moduleName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
+            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Feature -Replacements @{"ProjectName" = "$projectName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
@@ -67,18 +67,17 @@ function New-ScModule
             Install-Package Microsoft.Net.Compilers -Version 1.0.0 -ProjectName $projectName | Out-Null
             Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
-            Install-Package Microsoft.AspNet.WebApi -Version 5.2.3 -ProjectName $projectName | Out-Null
+            Install-Package Microsoft.Web.Infrastructure -Version 1.0.0 -ProjectName $projectName | Out-Null
             Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
             Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
             Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
-            
         }
         
         if($moduleType -eq 'Foundation') {
             
             $projectName =  "$solutionName.$moduleType.$moduleName"
             
-            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Foundation -Replacements @{"ProjectName" = "$projectName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
+            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Foundation -Replacements @{"ProjectName" = "$projectName"} -OutputLocation $codeDir | Out-Null                     
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
@@ -116,7 +115,14 @@ function New-ScModule
             $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\Tests"
 
             mkdir $testsDir | Out-Null
-                                            
+            
+            $projectName =  "$solutionName.$moduleType.$moduleName.Tests"
+            
+            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Project -Replacements @{"ProjectName" = "$projectName"} -OutputLocation $testsDir | Out-Null                     
+                 
+            $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$projectName.$projectExtensionName") | Out-Null
+            
+            Install-Package NUnit -Version 3.1.2 -ProjectName $projectName | Out-Null                                            
             }
         }
     }
