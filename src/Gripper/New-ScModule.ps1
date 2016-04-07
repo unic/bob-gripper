@@ -21,9 +21,15 @@ function New-ScModule
             Write-Error "The script must be executed in the context of Visual Studio solution."
             
         }
+       
+        $moduleType = Read-Host "Please enter the type of your module ('Feature', 'Foundation' or 'Project')"
+        
+        if ((-not $moduleType -eq 'Feature') -or (-not $moduleType -eq 'Foundation') -or (-not $moduleType -eq 'Project'))
+        {
+            Write-Error "Module type must be either 'Feature', 'Foundation' or 'Project'."
+        }
         
         $sitecoreVersion = Read-Host "Please enter the Sitecore version you want to use (to use the default '8.1.160302.169' just hit enter))"
-        $moduleType = Read-Host "Please enter the type of your module ('Feature', 'Foundation' or 'Project')"
         $moduleName = Read-Host "Please enter the short name of your module (i.e. 'Identity')"
         $createTest = Read-Host "Please enter if you want to create a test project for your module ([y]es or [n]o)"       
         
@@ -52,9 +58,10 @@ function New-ScModule
         $moduleTypeVisualStudioFolder = $solutionNode.Projects | where-object { $_.ProjectName -eq $moduleType } | Select -First 1  
         
         $moduleNameVisualStudioFolder = $moduleTypeVisualStudioFolder.Object.AddSolutionFolder($moduleName)
-        
+       
+        $projectName = "" 
         $projectExtensionName = "csproj"
-        
+               
         if ($moduleType -eq 'Feature') {
             
             $projectName =  "$solutionName.$moduleType.$moduleName"
@@ -116,13 +123,15 @@ function New-ScModule
 
             mkdir $testsDir | Out-Null
             
-            $projectName =  "$solutionName.$moduleType.$moduleName.Tests"
+            $testProjectName =  "$solutionName.$moduleType.$moduleName.Tests"
             
-            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Project -Replacements @{"ProjectName" = "$projectName"} -OutputLocation $testsDir | Out-Null                     
+            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Tests -Replacements @{"ProjectName" = "$testProjectName"} -OutputLocation $testsDir | Out-Null                     
                  
-            $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$projectName.$projectExtensionName") | Out-Null
+            $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$testProjectName.$projectExtensionName") | Out-Null
             
-            Install-Package NUnit -Version 3.1.2 -ProjectName $projectName | Out-Null                                            
+            Install-Package nunit -Version 3.1.2 -ProjectName $testProjectName | Out-Null        
+            
+            (Get-Project $testProjectName).Object.References.Add($projectName)                                    
             }
         }
     }
