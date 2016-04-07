@@ -131,7 +131,9 @@ function New-ScModule
             
             Install-Package nunit -Version 3.2.0 -ProjectName $testProjectName | Out-Null        
             
-            (Get-Project $testProjectName).Object.References.Add($projectName)                                    
+            $projectObject = Get-Project $projectName
+            $testProjectObject = Get-Project $testProjectName
+            $testProjectObject.Object.References.AddProject($projectObject)                                    
             }
         }
     }
