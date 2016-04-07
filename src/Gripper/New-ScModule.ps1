@@ -129,7 +129,7 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$testProjectName.$projectExtensionName") | Out-Null
             
-            Install-Package nunit -Version 3.1.2 -ProjectName $testProjectName | Out-Null        
+            Install-Package nunit -Version 3.2.0 -ProjectName $testProjectName | Out-Null        
             
             (Get-Project $testProjectName).Object.References.Add($projectName)                                    
             }
