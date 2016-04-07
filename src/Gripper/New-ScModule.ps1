@@ -16,6 +16,40 @@ function New-ScModule
     Param()
     Process
     {
+        function InstallCompilersNugetPackages()
+        {
+            Install-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -Version 1.0.1 -ProjectName $projectName | Out-Null
+            Install-Package Microsoft.Net.Compilers -Version 1.0.0 -ProjectName $projectName | Out-Null
+        }
+        
+        function InstallAspMvcNugetPackages()
+        {
+            Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
+            Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
+        }
+        
+        function InstallAspWebApiNugetPackages()
+        {
+            Install-Package Microsoft.AspNet.WebApi -Version 5.2.3 -ProjectName $projectName | Out-Null
+        }
+        
+        function InstallWebInfrastructureNugetPackage()
+        {
+            Install-Package Microsoft.Web.Infrastructure -Version 1.0.0 -ProjectName $projectName | Out-Null
+        }
+        
+        function InstallSitecoreNugetPackages()
+        {
+            Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+        }
+        
+        function InstallNunitNugetPackage()
+        {
+            Install-Package nunit -Version 3.2.0 -ProjectName $testProjectName | Out-Null
+        }
+        
         if (!$dte) {
             
             Write-Error "The script must be executed in the context of Visual Studio solution."
@@ -70,14 +104,9 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            Install-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -Version 1.0.1 -ProjectName $projectName | Out-Null
-            Install-Package Microsoft.Net.Compilers -Version 1.0.0 -ProjectName $projectName | Out-Null
-            Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
-            Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
-            Install-Package Microsoft.Web.Infrastructure -Version 1.0.0 -ProjectName $projectName | Out-Null
-            Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
-            Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
-            Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            InstallAspMvcNugetPackages
+            InstallWebInfrastructureNugetPackage
+            InstallSitecoreNugetPackages
         }
         
         if($moduleType -eq 'Foundation') {
@@ -88,13 +117,9 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            Install-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -Version 1.0.1 -ProjectName $projectName | Out-Null
-            Install-Package Microsoft.Net.Compilers -Version 1.0.0 -ProjectName $projectName | Out-Null
-            Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
-            Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
-            Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
-            Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
-            Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            InstallCompilersNugetPackages
+            InstallAspMvcNugetPackages
+            InstallSitecoreNugetPackages
         }
             
         if ($moduleType -eq 'Project') {
@@ -105,14 +130,10 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            Install-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -Version 1.0.1 -ProjectName $projectName | Out-Null
-            Install-Package Microsoft.Net.Compilers -Version 1.0.0 -ProjectName $projectName | Out-Null
-            Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
-            Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
-            Install-Package Microsoft.AspNet.WebApi -Version 5.2.3 -ProjectName $projectName | Out-Null
-            Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
-            Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
-            Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
+            InstallCompilersNugetPackages
+            InstallAspMvcNugetPackages
+            InstallAspWebApiNugetPackages
+            InstallSitecoreNugetPackages
         }
         
         switch($createTest.ToLower()) {
@@ -129,12 +150,15 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$testProjectName.$projectExtensionName") | Out-Null
             
-            Install-Package nunit -Version 3.2.0 -ProjectName $testProjectName | Out-Null        
+            InstallNunitNugetPackage
             
             $projectObject = Get-Project $projectName
             $testProjectObject = Get-Project $testProjectName
-            $testProjectObject.Object.References.AddProject($projectObject)                                    
+            
+            $testProjectObject.Object.References.AddProject($projectObject) | Out-Null                                    
             }
         }
+        
+        Write-Host "The set up has been completed successfully."        
     }
 }
