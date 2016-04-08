@@ -38,7 +38,7 @@ function New-ScModule
             Install-Package Microsoft.Web.Infrastructure -Version 1.0.0 -ProjectName $projectName | Out-Null
         }
         
-        function InstallSitecoreNugetPackages()
+        function InstallSitecoreNugetPackages($sitecoreVersion)
         {
             Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
             Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
@@ -63,18 +63,12 @@ function New-ScModule
             Write-Error "Module type must be either 'Feature', 'Foundation' or 'Project'."
         }
         
-        $sitecoreVersion = Read-Host "Please enter the Sitecore version you want to use (to use the default '8.1.160302.169' just hit enter))"
         $moduleName = Read-Host "Please enter the short name of your module (i.e. 'Identity')"
         $createTest = Read-Host "Please enter if you want to create a test project for your module ([y]es or [n]o)"       
         
         if ([string]::IsNullOrEmpty($moduleType) -or  [string]::IsNullOrEmpty($moduleName) -or [string]::IsNullOrEmpty($createTest))
         {
             Write-Error "Module type, name and whether to create a test project are required."
-        }
-        
-        if(!$sitecoreVersion)
-        {
-            $sitecoreVersion = "8.1.160302.169"
         }
         
         $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
@@ -92,10 +86,14 @@ function New-ScModule
         $moduleTypeVisualStudioFolder = $solutionNode.Projects | where-object { $_.ProjectName -eq $moduleType } | Select -First 1  
         
         $moduleNameVisualStudioFolder = $moduleTypeVisualStudioFolder.Object.AddSolutionFolder($moduleName)
-       
+        
         $projectName = "" 
         $projectExtensionName = "csproj"
-               
+        
+        $config = Get-ScProjectConfig
+        
+        $sitecoreVersion = $config.SitecoreVersion
+        
         if ($moduleType -eq 'Feature') {
             
             $projectName =  "$solutionName.$moduleType.$moduleName"
@@ -106,7 +104,7 @@ function New-ScModule
             
             InstallAspMvcNugetPackages
             InstallWebInfrastructureNugetPackage
-            InstallSitecoreNugetPackages
+            InstallSitecoreNugetPackages($sitecoreVersion)
         }
         
         if($moduleType -eq 'Foundation') {
@@ -119,7 +117,7 @@ function New-ScModule
             
             InstallCompilersNugetPackages
             InstallAspMvcNugetPackages
-            InstallSitecoreNugetPackages
+            InstallSitecoreNugetPackages($sitecoreVersion)
         }
             
         if ($moduleType -eq 'Project') {
@@ -133,7 +131,7 @@ function New-ScModule
             InstallCompilersNugetPackages
             InstallAspMvcNugetPackages
             InstallAspWebApiNugetPackages
-            InstallSitecoreNugetPackages
+            InstallSitecoreNugetPackages($sitecoreVersion)
         }
         
         switch($createTest.ToLower()) {
