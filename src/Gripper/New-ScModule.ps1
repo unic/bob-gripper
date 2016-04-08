@@ -113,7 +113,7 @@ function New-ScModule
             
             $projectName =  "$solutionName.$moduleType.$moduleName"
             
-            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Foundation -Replacements @{"ProjectName" = "$projectName"} -OutputLocation $codeDir | Out-Null                     
+            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Foundation -Replacements @{"ProjectName" = "$projectName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
