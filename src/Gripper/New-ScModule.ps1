@@ -76,6 +76,15 @@ function New-ScModule
             Write-Error "Module type, name and whether to create a test project are required."
         }
         
+        $config = Get-ScProjectConfig
+        
+        $sitecoreVersion = $config.SitecoreVersion
+        
+        if ([string]::IsNullOrEmpty($sitecoreVersion))
+        {
+            Write-Error "The Sitecore version must be set in Bob.config"
+        }
+        
         $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
         $solutionFolder = Split-Path -Parent $solutionNode.FullName
         $solutionName = [System.IO.Path]::GetFileNameWithoutExtension($solutionNode.FullName)
@@ -94,10 +103,6 @@ function New-ScModule
         
         $projectName = "" 
         $projectExtensionName = "csproj"
-        
-        $config = Get-ScProjectConfig
-        
-        $sitecoreVersion = $config.SitecoreVersion
         
         if ($moduleType -eq 'Feature') {
             
