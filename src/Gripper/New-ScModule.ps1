@@ -40,6 +40,8 @@ function New-ScModule
         
         function InstallSitecoreNugetPackages($projectName, $sitecoreVersion)
         {
+            Write-Host $sitecoreVersion
+            
             Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
             Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
             Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
@@ -84,6 +86,8 @@ function New-ScModule
         {
             Write-Error "The Sitecore version must be set in Bob.config"
         }
+        
+        Write-Host $sitecoreVersion
         
         $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
         $solutionFolder = Split-Path -Parent $solutionNode.FullName
