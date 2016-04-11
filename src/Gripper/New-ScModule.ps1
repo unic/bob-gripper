@@ -40,8 +40,6 @@ function New-ScModule
         
         function InstallSitecoreNugetPackages($projectName, $sitecoreVersion)
         {
-            Write-Host $sitecoreVersion
-            
             Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
             Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
             Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
@@ -87,8 +85,6 @@ function New-ScModule
             Write-Error "The Sitecore version must be set in Bob.config"
         }
         
-        Write-Host $sitecoreVersion
-        
         $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
         $solutionFolder = Split-Path -Parent $solutionNode.FullName
         $solutionName = [System.IO.Path]::GetFileNameWithoutExtension($solutionNode.FullName)
@@ -116,10 +112,10 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            InstallAspMvcNugetPackages($projectName)
-            InstallWebInfrastructureNugetPackage($projectName)
-            InstallSitecoreNugetPackages($projectName, $sitecoreVersion)
-            InstallBobMachinesNugetPackages($projectName)
+            InstallAspMvcNugetPackages $projectName
+            InstallWebInfrastructureNugetPackage $projectName
+            InstallSitecoreNugetPackages $projectName $sitecoreVersion
+            InstallBobMachinesNugetPackages $projectName
         }
         
         if($moduleType -eq 'Foundation') {
@@ -130,10 +126,10 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            InstallCompilersNugetPackages($projectName)
-            InstallAspMvcNugetPackages($projectName)
-            InstallSitecoreNugetPackages($projectName, $sitecoreVersion)
-            InstallBobMachinesNugetPackages($projectName)
+            InstallCompilersNugetPackages $projectName
+            InstallAspMvcNugetPackages $projectName
+            InstallSitecoreNugetPackages $projectName $sitecoreVersion
+            InstallBobMachinesNugetPackages $projectName
         }
             
         if ($moduleType -eq 'Project') {
@@ -144,11 +140,11 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            InstallCompilersNugetPackages($projectName)
-            InstallAspMvcNugetPackages($projectName)
-            InstallAspWebApiNugetPackages($projectName)
-            InstallSitecoreNugetPackages($projectName, $sitecoreVersion)
-            InstallBobMachinesNugetPackages($projectName)
+            InstallCompilersNugetPackages $projectName
+            InstallAspMvcNugetPackages $projectName
+            InstallAspWebApiNugetPackages $projectName
+            InstallSitecoreNugetPackages $projectName $sitecoreVersion
+            InstallBobMachinesNugetPackages $projectName
         }
         
         switch($createTest.ToLower()) {
@@ -165,7 +161,7 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$testProjectName.$projectExtensionName") | Out-Null
             
-            InstallNunitNugetPackage($testProjectName)
+            InstallNunitNugetPackage $testProjectName
             
             $projectObject = Get-Project $projectName
             $testProjectObject = Get-Project $testProjectName
