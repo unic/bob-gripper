@@ -10,6 +10,9 @@ The folder where the subfolders should be deleted.
 .PARAMETER Pattern
 The patterns which should **not** be deleted.
 
+.PARAMETER Files
+If true the files which are directly in the root will also be deleted.
+
 .EXAMPLE
 Remove-RubbleItem -Folder D:\dummy -Pattern "Do\Not\*Delete"
 
@@ -21,24 +24,32 @@ function Remove-RubbleItem
       [Parameter(Mandatory=$true)]
       [string] $Folder,
       [Parameter(Mandatory=$true)]
-      [string[]] $Pattern
+      [string[]] $Pattern,
+      [switch] $Files
   )
   Process
   {
-    $Folder = $Folder.TrimEnd("\") + "\"
+    $Folder = (Resolve-Path ($Folder.TrimEnd("\") + "\"))
 
     $itemsToKeep = @()
     foreach($patt in $Pattern) {
-      foreach($subFolder in (ls $Folder -recurse | Where {$_.PSIsContainer})) {
-        if($subFolder.FullName.Replace($Folder, "") -like $patt) {
-          $itemsToKeep += $subFolder.FullName
+      foreach($item in (ls $Folder -recurse)) {
+        if($item.FullName.Replace($Folder, "") -like $patt) {
+            if($item.PSIsContainer) {
+                $itemsToKeep += $item.FullName + "\" 
+            }
+            else {
+                 $itemsToKeep += $item.FullName
+            }
         }
       }
     }
-    foreach($item in (ls "$Folder" -Recurse | Where {$_.PSIsContainer -eq $true})) {
+    
+    foreach($item in (ls "$Folder" -Recurse | Where {$Files -or ($_.PSIsContainer -eq $true) -or ((Split-Path $_.FullName -parent) -ne $Folder.TrimEnd("\"))})) {
       $delete = $true;
       foreach($keep in $itemsToKeep) {
-        if($keep.StartsWith($item.FullName)) {
+          if(($keep.EndsWith("\") -and ($item.FullName + "\").StartsWith($keep)) -or 
+                ($item.PSIsContainer -and $keep.StartsWith($item.FullName + "\"))  -or ($keep -eq  $item.FullName )) {
           $delete = $false
           break;
         }

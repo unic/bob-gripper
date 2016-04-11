@@ -16,38 +16,43 @@ function New-ScModule
     Param()
     Process
     {
-        function InstallCompilersNugetPackages()
+        function InstallCompilersNugetPackages($projectName)
         {
             Install-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -Version 1.0.1 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.Net.Compilers -Version 1.0.0 -ProjectName $projectName | Out-Null
         }
         
-        function InstallAspMvcNugetPackages()
+        function InstallAspMvcNugetPackages($projectName)
         {
             Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
         }
         
-        function InstallAspWebApiNugetPackages()
+        function InstallAspWebApiNugetPackages($projectName)
         {
             Install-Package Microsoft.AspNet.WebApi -Version 5.2.3 -ProjectName $projectName | Out-Null
         }
         
-        function InstallWebInfrastructureNugetPackage()
+        function InstallWebInfrastructureNugetPackage($projectName)
         {
             Install-Package Microsoft.Web.Infrastructure -Version 1.0.0 -ProjectName $projectName | Out-Null
         }
         
-        function InstallSitecoreNugetPackages($sitecoreVersion)
+        function InstallSitecoreNugetPackages($projectName, $sitecoreVersion)
         {
             Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
             Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
             Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
         }
         
-        function InstallNunitNugetPackage()
+        function InstallNunitNugetPackage($projectName)
         {
-            Install-Package nunit -Version 3.2.0 -ProjectName $testProjectName | Out-Null
+            Install-Package nunit -Version 3.2.0 -ProjectName $projectName | Out-Null
+        }
+        
+        function InstallBobMachinesNugetPackages($projectName)
+        {
+            Install-Package Unic.Bob.Muck -Version 2.0.0-release0001 -ProjectName $projectName | Out-Null
         }
         
         if (!$dte) {
@@ -102,9 +107,10 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            InstallAspMvcNugetPackages
-            InstallWebInfrastructureNugetPackage
-            InstallSitecoreNugetPackages($sitecoreVersion)
+            InstallAspMvcNugetPackages($projectName)
+            InstallWebInfrastructureNugetPackage($projectName)
+            InstallSitecoreNugetPackages($projectName, $sitecoreVersion)
+            InstallBobMachinesNugetPackages($projectName)
         }
         
         if($moduleType -eq 'Foundation') {
@@ -115,9 +121,10 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            InstallCompilersNugetPackages
-            InstallAspMvcNugetPackages
-            InstallSitecoreNugetPackages($sitecoreVersion)
+            InstallCompilersNugetPackages($projectName)
+            InstallAspMvcNugetPackages($projectName)
+            InstallSitecoreNugetPackages($projectName, $sitecoreVersion)
+            InstallBobMachinesNugetPackages($projectName)
         }
             
         if ($moduleType -eq 'Project') {
@@ -128,10 +135,11 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            InstallCompilersNugetPackages
-            InstallAspMvcNugetPackages
-            InstallAspWebApiNugetPackages
-            InstallSitecoreNugetPackages($sitecoreVersion)
+            InstallCompilersNugetPackages($projectName)
+            InstallAspMvcNugetPackages($projectName)
+            InstallAspWebApiNugetPackages($projectName)
+            InstallSitecoreNugetPackages($projectName, $sitecoreVersion)
+            InstallBobMachinesNugetPackages($projectName)
         }
         
         switch($createTest.ToLower()) {
@@ -148,7 +156,7 @@ function New-ScModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$testProjectName.$projectExtensionName") | Out-Null
             
-            InstallNunitNugetPackage
+            InstallNunitNugetPackage($testProjectName)
             
             $projectObject = Get-Project $projectName
             $testProjectObject = Get-Project $testProjectName

@@ -29,15 +29,86 @@ function Get-RubblePattern
       [System.Collections.Hashtable] $Replacement = @{}
   )
   Process
-  {
-        $patterns = $Pattern.Split(';') | % {$_.Trim()} | ? {$_ -ne ""}
-        $patterns = $patterns | % {
-          $item = $_
-          foreach($key in $Replacement.Keys) {
-            $item = $item -replace ([Regex]::Escape($key)), $Replacement[$key]
-          }
-          $item
+  { 
+        # In a two-dimensional array, it combines every value in the second dimesion with every other value in the second dimesion.
+        # Given this array: @(
+        #  @("1", "2"),
+        #  @("3", "4") ) 
+        # It returns @(@("1", "3"), @("1", "4"), @("2", "3"), @("2", "4"))
+        function combineOverTwoDimesions($array, $index) {
+            $subArray = @($array[$index])
+            
+            $return = New-Object System.Collections.ArrayList 
+
+            for($i = 0; $i -lt $subArray.Count; $i++) {
+                if(($index + 1) -eq $array.Count) {
+                    $return.Add($subArray[$i]) | Out-Null
+                   
+                }
+                else {
+                    $value = @(combineOverTwoDimesions $array ($index + 1))
+                    $value | % {
+                        $return.Add(@($subArray[$i], $_)) | Out-Null
+                    }
+                }
+            }
+
+             $return
         }
-        $patterns
+        
+
+        $replacements =  & {
+          foreach($key in $Replacement.Keys) {
+              $value =  $Replacement[$key]
+              if($value -is [system.array]) {
+                  $newValue = New-Object System.Collections.ArrayList 
+                  $newValue.AddRange($value)
+                  
+                  $value = $newValue
+
+                  # this returns every possible combination of $array
+                  $combiner = "."
+                    function combine($array, $index) {
+                        $array[$index]
+                        for($n = $index + 1; $n -lt $array.Count; $n++) {
+                            combine $array $n | % {
+                                $array[$index] + $combiner + $_
+                            }
+                        }
+                    }
+
+                    $values = @()
+                    for($i = 0; $i -lt $value.Count; $i++) {
+                        $values += @((combine $value $i) | % {$_})
+                    }
+
+                    ,@($values)
+              }
+              else {
+                  ,@($value)
+              }
+          }
+        }
+
+        $combinedReplacements   = New-Object System.Collections.ArrayList
+        foreach($value in @(combineOverTwoDimesions $replacements 0)) { 
+            $combinedReplacements.Add(@($value | % {$_})) | Out-Null
+        }
+
+
+        $patterns = $Pattern.Split(';') | % {$_.Trim()} | ? {$_ -ne ""}
+        $patterns | % {
+            for($j = 0; $j -lt  $combinedReplacements.Count; $j++) {
+                $item = $_
+                $replacementValue = $combinedReplacements[$j]
+                $i = 0
+                foreach($key in $Replacement.Keys) {
+                    $value = $replacementValue[$i]
+                    $item = $item -replace ([Regex]::Escape($key)),$value
+                    $i++
+                }
+                $item
+            }
+        }  | select -uniq
   }
 }
