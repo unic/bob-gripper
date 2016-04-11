@@ -18,4 +18,5 @@ function ResolvePath() {
   Write-Error "No path found for $RelativePath in package $PackageId"
 }
 
-Import-Module (ResolvePath Unic.Bob.Rubble  "tools\Rubble")
+Import-Module (ResolvePath "Unic.Bob.Rubble"  "tools\Rubble")
+Import-Module (ResolvePath "Unic.Bob.Config" "tools\BobConfig")
