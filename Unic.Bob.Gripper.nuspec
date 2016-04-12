@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package >
+    <metadata>
+        <id>Unic.Bob.Gripper</id>
+        <authors>Unic AG</authors>
+        <version>$VERSION$</version>
+        <owners>Unic AG</owners>
+        <iconUrl>https://www.unic.com/img/unic-logo.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Gripper is responsible for creating new modules in projects.</description>
+    </metadata>
+    <files>
+        <file src="src\**" target="tools" />
+        <file src="packages\**" target="tools\packages" exclude="**\package\services\metadata\core-properties\**;**\Unic.Bob.Keith\**;**\pester\**" />
+    </files>
+</package>
