@@ -52,7 +52,7 @@ function New-ScModule
         
         function InstallBobMachinesNugetPackages($projectName)
         {
-            Install-Package Unic.Bob.Muck -Version 2.0.0-release0001 -ProjectName $projectName | Out-Null
+            Install-Package Unic.Bob.Muck -Version 2.0.0 -ProjectName $projectName | Out-Null
         }
         
         if (!$dte) {
@@ -151,22 +151,22 @@ function New-ScModule
                    
             {($_ -eq "y") -or ($_ -eq "yes")} { 
                         
-            $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\Tests"
+                $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\Tests"
 
-            mkdir $testsDir | Out-Null
+                mkdir $testsDir | Out-Null
             
-            $testProjectName =  "$solutionName.$moduleType.$moduleName.Tests"
+                $testProjectName =  "$solutionName.$moduleType.$moduleName.Tests"
             
-            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Tests -Replacements @{"ProjectName" = "$testProjectName"} -OutputLocation $testsDir | Out-Null                     
+                New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Tests -Replacements @{"ProjectName" = "$testProjectName"} -OutputLocation $testsDir | Out-Null                     
                  
-            $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$testProjectName.$projectExtensionName") | Out-Null
+                $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$testProjectName.$projectExtensionName") | Out-Null
             
-            InstallNunitNugetPackage $testProjectName
+                InstallNunitNugetPackage $testProjectName
             
-            $projectObject = Get-Project $projectName
-            $testProjectObject = Get-Project $testProjectName
+                $projectObject = Get-Project $projectName
+                $testProjectObject = Get-Project $testProjectName
             
-            $testProjectObject.Object.References.AddProject($projectObject) | Out-Null                                    
+                $testProjectObject.Object.References.AddProject($projectObject) | Out-Null                                    
             }
         }
         
