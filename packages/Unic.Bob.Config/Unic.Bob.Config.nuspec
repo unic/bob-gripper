@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Unic.Bob.Config</id>
+    <version>2.0.0</version>
+    <authors>Unic AG</authors>
+    <owners>Unic AG</owners>
+    <iconUrl>https://www.unic.com/img/unic-logo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides the Bob.config and PowerShell functionallity to read the Bob.config</description>
+  </metadata>
+</package>

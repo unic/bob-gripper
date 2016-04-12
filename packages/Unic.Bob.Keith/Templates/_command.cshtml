@@ -1,0 +1,72 @@
+@using System.Linq
+
+
+# @Model["Command"].Name
+
+@if(Model["Command"].details.description != null) {
+    @Model["Command"].Synopsis
+}
+
+## Syntax
+
+@if(Model["Command"].details.description != null) {
+    @foreach(var item in OutString(Model["Command"].syntax).Trim().Split('\n'))
+    {
+@:    @item
+@:
+    }
+}
+else {
+    @foreach(var item in OutString(@Model["Command"].Synopsis).Trim().Split('\n'))
+    {
+@:    @item
+@:
+    }
+}
+
+@if(Model["Command"].Description != null) {
+@:## Description
+    @foreach(var desc in Model["Command"].Description) {
+        @OutString(desc)
+    }
+}
+
+## Parameters
+
+@if(Model["Command"].PARAMETERS != null && Model["Command"].PARAMETERS.parameter != null) {
+    @foreach(var param in Model["Command"].PARAMETERS.parameter) {
+    <text>
+    -@param.name <@param.parameterValue>
+        @if(param.description != null) {
+            @foreach(var desc in param.description) {
+@:_@OutString(desc).Trim()_
+            }
+        }
+| Position | Required | Default value | Accept pipeline input | Accept wildchard characters |
+| -------- | -------- | ------------- | --------------------- | --------------------------- |
+| @param.position | @param.required | @param.defaultValue | @param.pipelineInput | @param.globbing |
+
+
+----
+
+    </text>
+    }
+}
+
+## Examples
+
+@if(Model["Command"].Examples != null && Model["Command"].Examples.example != null)
+{
+    @foreach(var ex in Model["Command"].Examples.example)
+    {
+@:### @ex.title
+
+        @foreach(var item in @ex.code.Split('\n'))
+        {
+@:    @item
+        }
+        @foreach(var item in ex.remarks){
+            @OutString(item)
+        }
+    }
+}
