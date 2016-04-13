@@ -7,7 +7,7 @@ Export-ModuleMember -Function * -Alias *
 
 function ResolvePath() {
   param($PackageId, $RelativePath)
-  $paths = @("$PSScriptRoot\..\..\..\paket-files", "$PSScriptRoot\..\..\..\packages", "$PSScriptRoot\..\paket-files", "$PSScriptRoot\..\packages")
+  $paths = @("$PSScriptRoot\..\..\..\paket-files", "$PSScriptRoot\..\..\..\packages", "$PSScriptRoot\..\paket-files", "$PSScriptRoot\..\packages", "$PSScriptRoot\..\..\paket-files", "$PSScriptRoot\..\..\packages")
   foreach($packPath in $paths) {
     $path = Join-Path $packPath "$PackageId\$RelativePath"
     if((Test-Path $packPath) -and (Test-Path $path)) {

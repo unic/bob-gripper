@@ -1,2 +1,7 @@
 packages/
 paket.exe
+bin
+obj
+*.user
+.vs
+docs-generated/

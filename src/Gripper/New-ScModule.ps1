@@ -10,7 +10,6 @@ in proper directories in the file system and Visual Studio solution.
 New-ScModule
 
 #>
-
 function New-ScModule
 {
     [CmdletBinding()]
