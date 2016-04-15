@@ -151,7 +151,7 @@ function New-ScModule
                    
             {($_ -eq "y") -or ($_ -eq "yes")} { 
                         
-                $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\Tests"
+                $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\tests"
 
                 mkdir $testsDir | Out-Null
             
