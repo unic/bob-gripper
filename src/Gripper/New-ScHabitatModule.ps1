@@ -32,12 +32,7 @@ function New-ScHabitatModule
         {
             Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
-        }
-        
-        function InstallAspWebApiNugetPackages($projectName)
-        {
-            Install-Package Microsoft.AspNet.WebApi -Version 5.2.3 -ProjectName $projectName | Out-Null
-        }
+        }        
         
         function InstallWebInfrastructureNugetPackage($projectName)
         {
@@ -146,7 +141,6 @@ function New-ScHabitatModule
             
             InstallCompilersNugetPackages $projectName
             InstallAspMvcNugetPackages $projectName
-            InstallAspWebApiNugetPackages $projectName
             InstallSitecoreNugetPackages $projectName $sitecoreVersion
             InstallBobMachinesNugetPackages $projectName
         }
