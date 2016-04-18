@@ -6,14 +6,20 @@ Creates new projects for a new module according to our architecture guidelines.
 Creates new projects for a new module according to our architecture guidelines. You will be asked a few questions and Gripper will create new projects 
 in proper directories in the file system and Visual Studio solution.
 
+.PARAMETER moduleType 
+The type of the module to bootstrap.
+
 .EXAMPLE
-New-ScModule
+New-ScHabitatModule "Feature"
 
 #>
-function New-ScModule
+function New-ScHabitatModule
 {
     [CmdletBinding()]
-    Param()
+    Param(
+        [Parameter(Mandatory=$true)]
+        [string] $moduleType
+    )
     Process
     {
         function InstallCompilersNugetPackages($projectName)
@@ -61,8 +67,6 @@ function New-ScModule
             
         }
        
-        $moduleType = Read-Host "Please enter the type of your module ('Feature', 'Foundation' or 'Project')"
-        
         if ((-not $moduleType -eq 'Feature') -or (-not $moduleType -eq 'Foundation') -or (-not $moduleType -eq 'Project'))
         {
             Write-Error "Module type must be either 'Feature', 'Foundation' or 'Project'."
