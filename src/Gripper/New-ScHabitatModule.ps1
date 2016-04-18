@@ -6,14 +6,20 @@ Creates new projects for a new module according to our architecture guidelines.
 Creates new projects for a new module according to our architecture guidelines. You will be asked a few questions and Gripper will create new projects 
 in proper directories in the file system and Visual Studio solution.
 
+.PARAMETER moduleType 
+The type of the module to bootstrap.
+
 .EXAMPLE
-New-ScModule
+New-ScHabitatModule "Feature"
 
 #>
-function New-ScModule
+function New-ScHabitatModule
 {
     [CmdletBinding()]
-    Param()
+    Param(
+        [Parameter(Mandatory=$true)]
+        [string] $moduleType
+    )
     Process
     {
         function InstallCompilersNugetPackages($projectName)
@@ -26,12 +32,7 @@ function New-ScModule
         {
             Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
             Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
-        }
-        
-        function InstallAspWebApiNugetPackages($projectName)
-        {
-            Install-Package Microsoft.AspNet.WebApi -Version 5.2.3 -ProjectName $projectName | Out-Null
-        }
+        }        
         
         function InstallWebInfrastructureNugetPackage($projectName)
         {
@@ -61,8 +62,6 @@ function New-ScModule
             
         }
        
-        $moduleType = Read-Host "Please enter the type of your module ('Feature', 'Foundation' or 'Project')"
-        
         if ((-not $moduleType -eq 'Feature') -or (-not $moduleType -eq 'Foundation') -or (-not $moduleType -eq 'Project'))
         {
             Write-Error "Module type must be either 'Feature', 'Foundation' or 'Project'."
@@ -142,7 +141,6 @@ function New-ScModule
             
             InstallCompilersNugetPackages $projectName
             InstallAspMvcNugetPackages $projectName
-            InstallAspWebApiNugetPackages $projectName
             InstallSitecoreNugetPackages $projectName $sitecoreVersion
             InstallBobMachinesNugetPackages $projectName
         }
@@ -151,7 +149,7 @@ function New-ScModule
                    
             {($_ -eq "y") -or ($_ -eq "yes")} { 
                         
-                $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\Tests"
+                $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\tests"
 
                 mkdir $testsDir | Out-Null
             

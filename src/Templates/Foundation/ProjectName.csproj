@@ -66,9 +66,6 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Config\Include\Foundation\Foundation.ModuleName.Serialization.config" />    
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
