@@ -1,5 +1,8 @@
 # Gripper
 
+## 0.5
+* Updated the theme
+
 ## 0.4
 * Updated docs
 
