@@ -84,7 +84,7 @@ function New-ScHabitatModule
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
             if($config.GripperCodeProjectNugetPackages) {
-                InstallNugetPackages $testProjectName $config.GripperCodeProjectNugetPackages
+                InstallNugetPackages $projectName $config.GripperCodeProjectNugetPackages
             }
         }
         
@@ -97,7 +97,7 @@ function New-ScHabitatModule
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
             if($config.GripperCodeProjectNugetPackages) {
-                InstallNugetPackages $testProjectName $config.GripperCodeProjectNugetPackages
+                InstallNugetPackages $projectName $config.GripperCodeProjectNugetPackages
             }
         }
             
@@ -110,7 +110,7 @@ function New-ScHabitatModule
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
             if($config.GripperCodeProjectNugetPackages) {
-                InstallNugetPackages $testProjectName $config.GripperCodeProjectNugetPackages
+                InstallNugetPackages $projectName $config.GripperCodeProjectNugetPackages
             }
         }
         
