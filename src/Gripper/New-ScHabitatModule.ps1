@@ -22,38 +22,10 @@ function New-ScHabitatModule
     )
     Process
     {
-        function InstallCompilersNugetPackages($projectName)
-        {
-            Install-Package Microsoft.CodeDom.Providers.DotNetCompilerPlatform -Version 1.0.1 -ProjectName $projectName | Out-Null
-            Install-Package Microsoft.Net.Compilers -Version 1.0.0 -ProjectName $projectName | Out-Null
-        }
-        
-        function InstallAspMvcNugetPackages($projectName)
-        {
-            Install-Package Newtonsoft.Json -Version 6.0.8 -ProjectName $projectName | Out-Null
-            Install-Package Microsoft.AspNet.Mvc -Version 5.2.3 -ProjectName $projectName | Out-Null
-        }        
-        
-        function InstallWebInfrastructureNugetPackage($projectName)
-        {
-            Install-Package Microsoft.Web.Infrastructure -Version 1.0.0 -ProjectName $projectName | Out-Null
-        }
-        
-        function InstallSitecoreNugetPackages($projectName, $sitecoreVersion)
-        {
-            Install-Package Sitecore -Version $sitecoreVersion -ProjectName $projectName | Out-Null
-            Install-Package Sitecore.Kernel -Version $sitecoreVersion -ProjectName $projectName | Out-Null
-            Install-Package Sitecore.Mvc -Version $sitecoreVersion -ProjectName $projectName | Out-Null
-        }
-        
-        function InstallNunitNugetPackage($projectName)
-        {
-            Install-Package nunit -Version 3.2.0 -ProjectName $projectName | Out-Null
-        }
-        
-        function InstallBobMachinesNugetPackages($projectName)
-        {
-            Install-Package Unic.Bob.Muck -Version 2.0.0 -ProjectName $projectName | Out-Null
+        function InstallNugetPackages($projectName, $packages) {
+            foreach($package in $packages) {
+                Install-Package $package.ID -Version $package.Version -ProjectName $projectName 
+            }
         }
         
         if (!$dte) {
@@ -111,10 +83,9 @@ function New-ScHabitatModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            InstallAspMvcNugetPackages $projectName
-            InstallWebInfrastructureNugetPackage $projectName
-            InstallSitecoreNugetPackages $projectName $sitecoreVersion
-            InstallBobMachinesNugetPackages $projectName
+            if($config.GripperCodeProjectNugetPackages) {
+                InstallNugetPackages $testProjectName $config.GripperCodeProjectNugetPackages
+            }
         }
         
         if($moduleType -eq 'Foundation') {
@@ -125,10 +96,9 @@ function New-ScHabitatModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            InstallCompilersNugetPackages $projectName
-            InstallAspMvcNugetPackages $projectName
-            InstallSitecoreNugetPackages $projectName $sitecoreVersion
-            InstallBobMachinesNugetPackages $projectName
+            if($config.GripperCodeProjectNugetPackages) {
+                InstallNugetPackages $testProjectName $config.GripperCodeProjectNugetPackages
+            }
         }
             
         if ($moduleType -eq 'Project') {
@@ -139,10 +109,9 @@ function New-ScHabitatModule
                  
             $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
             
-            InstallCompilersNugetPackages $projectName
-            InstallAspMvcNugetPackages $projectName
-            InstallSitecoreNugetPackages $projectName $sitecoreVersion
-            InstallBobMachinesNugetPackages $projectName
+            if($config.GripperCodeProjectNugetPackages) {
+                InstallNugetPackages $testProjectName $config.GripperCodeProjectNugetPackages
+            }
         }
         
         switch($createTest.ToLower()) {
@@ -159,7 +128,9 @@ function New-ScHabitatModule
                  
                 $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$testProjectName.$projectExtensionName") | Out-Null
             
-                InstallNunitNugetPackage $testProjectName
+                if($config.GripperTestProjectNugetPackages) {
+                    InstallNugetPackages $testProjectName $config.GripperTestProjectNugetPackages
+                }
             
                 $projectObject = Get-Project $projectName
                 $testProjectObject = Get-Project $testProjectName
