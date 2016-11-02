@@ -16,6 +16,6 @@ function New-FoundationModule
     Param()
     Process
     {
-        New-ScHabitatModule "Foundation"
+        New-ScHelixModule "Foundation"
     }
 }

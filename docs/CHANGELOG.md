@@ -1,6 +1,9 @@
 # Gripper
 
+
 ## 0.5
+* No NuGet package is installed anymore. Instead you need to configure which one are installed in Bob.config with the keys `GripperCodeProjectNugetPackages` and `GripperTestProjectNugetPackages` 
+* Renamed Habitat to Helix
 * Updated the theme
 
 ## 0.4

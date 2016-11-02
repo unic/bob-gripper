@@ -16,6 +16,6 @@ function New-ProjectModule
     Param()
     Process
     {
-        New-ScHabitatModule "Project"
+        New-ScHelixModule "Project"
     }
 }
