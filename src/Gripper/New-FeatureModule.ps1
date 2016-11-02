@@ -16,6 +16,6 @@ function New-FeatureModule
     Param()
     Process
     {
-        New-ScHabitatModule "Feature"      
+        New-ScHelixModule "Feature"      
     }
 }
