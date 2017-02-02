@@ -48,14 +48,7 @@ function New-ScHelixModule
         }
         
         $config = Get-ScProjectConfig
-        
-        $sitecoreVersion = $config.SitecoreVersion
-        
-        if ([string]::IsNullOrEmpty($sitecoreVersion))
-        {
-            Write-Error "The Sitecore version must be set in Bob.config"
-        }
-        
+                
         $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
         $solutionFolder = Split-Path -Parent $solutionNode.FullName
         $solutionName = [System.IO.Path]::GetFileNameWithoutExtension($solutionNode.FullName)
