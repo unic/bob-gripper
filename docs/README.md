@@ -11,3 +11,23 @@ In order to use Gripper call the New-FeatureModule, New-FoundationModule or New-
 
 
 **Be careful: Gripper installs nuget packages from both sources - nuget.org and our Unic Team City. They must be present on your package sources list in Visual Studio and the All must be selected for the package sources.**
+
+## Configuration
+
+| Key | Description | Example | 
+| --- | --- |
+| GripperTestProjectNugetPackages | A list of packages which can should be installed to the test project | `<GripperTestProjectNugetPackages>` <br> `<Package ID="NUnit" Version="3.5.0" />
+` <br> `</GripperTestProjectNugetPackages>` |
+| GripperCodeProjectNugetPackages | A list of packages which can should be installed to the test project | `<GripperCodeProjectNugetPackages>` <br> `<Package ID="Unic.Logging.Core" Version="3.5.0" />
+` <br> `</GripperCodeProjectNugetPackages>` |
+| GripperCodeTemplate | The path to the folder containing a template for code projects. | `<GripperCodeTemplate>src\Templates\Code\</GripperCodeTemplate>` |
+| GripperTestTemplate | The path to the folder containing a template for code projects. | `<GripperCodeTemplate>src\Templates\Code\</GripperCodeTemplate>` |
+
+## Templates
+You can create your own templates for your solution. Basically a template is a folder which gets transformed to the destination folder.
+The following words can be used in a template and will be replaced:
+| Name | Description |
+| --- | --- |
+| ProjectName | The name of the project without the ending ".csproj" |
+| ModuleName | The name of the module typed by the user | 
+| ModuleType | The type of the module. Normally either Project, Foundation or Feature |
