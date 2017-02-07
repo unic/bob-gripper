@@ -29,116 +29,66 @@ function New-ScHelixModule
         }
         
         if (!$dte) {
-            
             Write-Error "The script must be executed in the context of Visual Studio solution."
-            
         }
        
-        if ((-not $moduleType -eq 'Feature') -or (-not $moduleType -eq 'Foundation') -or (-not $moduleType -eq 'Project'))
-        {
-            Write-Error "Module type must be either 'Feature', 'Foundation' or 'Project'."
+        if ((-not $moduleType -eq 'Feature') -or (-not $moduleType -eq 'Foundation') -or (-not $moduleType -eq 'Project')) {
+            Write-Warn "Module type should be either 'Feature', 'Foundation' or 'Project'."
         }
         
-        $moduleName = Read-Host "Please enter the short name of your module (i.e. 'Identity')"
-        $createTest = Read-Host "Please enter if you want to create a test project for your module ([y]es or [n]o)"       
+        $moduleName = Read-Host "Please enter the short name of your module (i.e. 'Identity')"   
         
-        if ([string]::IsNullOrEmpty($moduleType) -or  [string]::IsNullOrEmpty($moduleName) -or [string]::IsNullOrEmpty($createTest))
-        {
-            Write-Error "Module type, name and whether to create a test project are required."
+        if ( [string]::IsNullOrEmpty($moduleName)) {
+            Write-Error "Module name is required."
         }
         
         $config = Get-ScProjectConfig
-        
-        $sitecoreVersion = $config.SitecoreVersion
-        
-        if ([string]::IsNullOrEmpty($sitecoreVersion))
-        {
-            Write-Error "The Sitecore version must be set in Bob.config"
+                
+        $codeTemplate = "$PSScriptRoot\..\Templates\Code"
+        if($config.GripperCodeTemplate) {
+            $codeTemplate = Resolve-Path $config.GripperCodeTemplate
         }
-        
+
         $solutionNode = Get-Interface $dte.Solution ([EnvDTE80.Solution2])
         $solutionFolder = Split-Path -Parent $solutionNode.FullName
         $solutionName = [System.IO.Path]::GetFileNameWithoutExtension($solutionNode.FullName)
 
         $codeDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\code"
-                
         mkdir $codeDir | Out-Null
-                
-        $serializationDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\serialization"
-                
-        mkdir $serializationDir | Out-Null
-                
         $moduleTypeVisualStudioFolder = $solutionNode.Projects | where-object { $_.ProjectName -eq $moduleType } | Select -First 1  
-        
         $moduleNameVisualStudioFolder = $moduleTypeVisualStudioFolder.Object.AddSolutionFolder($moduleName)
-        
-        $projectName = "" 
         $projectExtensionName = "csproj"
-        
-        if ($moduleType -eq 'Feature') {
-            
-            $projectName =  "$solutionName.$moduleType.$moduleName"
-            
-            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Feature -Replacements @{"ProjectName" = "$projectName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
-                 
-            $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
-            
-            if($config.GripperCodeProjectNugetPackages) {
-                InstallNugetPackages $projectName $config.GripperCodeProjectNugetPackages
-            }
-        }
-        
-        if($moduleType -eq 'Foundation') {
-            
-            $projectName =  "$solutionName.$moduleType.$moduleName"
-            
-            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Foundation -Replacements @{"ProjectName" = "$projectName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
-                 
-            $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
-            
-            if($config.GripperCodeProjectNugetPackages) {
-                InstallNugetPackages $projectName $config.GripperCodeProjectNugetPackages
-            }
-        }
-            
-        if ($moduleType -eq 'Project') {
-            
+        $projectName =  "$solutionName.$moduleType.$moduleName"
+        if($moduleType -eq "Project") {
             $projectName =  "$solutionName.$moduleName.Website"
-            
-            New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Project -Replacements @{"ProjectName" = "$projectName"; "ModuleName" = $moduleName} -OutputLocation $codeDir | Out-Null                     
-                 
-            $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
-            
-            if($config.GripperCodeProjectNugetPackages) {
-                InstallNugetPackages $projectName $config.GripperCodeProjectNugetPackages
-            }
         }
-        
-        switch($createTest.ToLower()) {
-                   
-            {($_ -eq "y") -or ($_ -eq "yes")} { 
-                        
-                $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\tests"
+        New-ScProject -TemplateLocation $codeTemplate -Replacements @{"ProjectName" = "$projectName"; "ModuleName" = $moduleName; "ModuleType" = "$moduleType"} -OutputLocation $codeDir | Out-Null                     
+        $moduleNameVisualStudioFolder.Object.AddFromFile("$codeDir\$projectName.$projectExtensionName") | Out-Null
+        if($config.GripperCodeProjectNugetPackages) {
+            InstallNugetPackages $projectName $config.GripperCodeProjectNugetPackages
+        }
 
-                mkdir $testsDir | Out-Null
-            
-                $testProjectName =  "$solutionName.$moduleType.$moduleName.Tests"
-            
-                New-ScProject -TemplateLocation $PSScriptRoot\..\Templates\Tests -Replacements @{"ProjectName" = "$testProjectName"} -OutputLocation $testsDir | Out-Null                     
-                 
-                $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$testProjectName.$projectExtensionName") | Out-Null
-            
-                if($config.GripperTestProjectNugetPackages) {
-                    InstallNugetPackages $testProjectName $config.GripperTestProjectNugetPackages
-                }
-            
-                $projectObject = Get-Project $projectName
-                $testProjectObject = Get-Project $testProjectName
-            
-                $testProjectObject.Object.References.AddProject($projectObject) | Out-Null                                    
+
+        if($moduleType -ne "Project") {
+            $testTemplate = "$PSScriptRoot\..\Templates\Tests"
+            if($config.GripperTestTemplate) {
+                $testTemplate = Resolve-Path $config.GripperTestTemplate
             }
-        }
+
+            $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\tests"
+            mkdir $testsDir | Out-Null
+            $testProjectName =  "$solutionName.$moduleType.$moduleName.Tests"
+            New-ScProject -TemplateLocation $testTemplate -Replacements @{"ProjectName" = "$testProjectName";  "ModuleName" = $moduleName; "ModuleType" = "$moduleType"} -OutputLocation $testsDir | Out-Null                     
+            $moduleNameVisualStudioFolder.Object.AddFromFile("$testsDir\$testProjectName.$projectExtensionName") | Out-Null
+            if($config.GripperTestProjectNugetPackages) {
+                InstallNugetPackages $testProjectName $config.GripperTestProjectNugetPackages
+            }
         
+            $projectObject = Get-Project $projectName
+            $testProjectObject = Get-Project $testProjectName
+            $testProjectObject.Object.References.AddProject($projectObject) | Out-Null      
+        }
+
         Write-Host "The set up has been completed successfully."        
     }
 }
