@@ -16,15 +16,16 @@ In order to use Gripper call the New-FeatureModule, New-FoundationModule or New-
 
 | Key | Description | Example | 
 | --- | --- |
-| GripperTestProjectNugetPackages | A list of packages which can should be installed to the test project | `<GripperTestProjectNugetPackages>` <br> `<Package ID="NUnit" Version="3.5.0" />
-` <br> `</GripperTestProjectNugetPackages>` |
-| GripperCodeProjectNugetPackages | A list of packages which can should be installed to the test project | `<GripperCodeProjectNugetPackages>` <br> `<Package ID="Unic.Logging.Core" Version="3.5.0" />
+| GripperCodeProjectNugetPackages | A list of packages which willd be installed to the code project | `<GripperCodeProjectNugetPackages>` <br> `<Package ID="Unic.Logging.Core" Version="3.5.0" />
 ` <br> `</GripperCodeProjectNugetPackages>` |
 | GripperCodeTemplate | The path to the folder containing a template for code projects. | `<GripperCodeTemplate>src\Templates\Code\</GripperCodeTemplate>` |
-| GripperTestTemplate | The path to the folder containing a template for code projects. | `<GripperCodeTemplate>src\Templates\Code\</GripperCodeTemplate>` |
+| GripperTestProjectNugetPackages | A list of packages which will be installed to the test project | `<GripperTestProjectNugetPackages>` <br> `<Package ID="NUnit" Version="3.5.0" />
+` <br> `</GripperTestProjectNugetPackages>` |
+| GripperTestTemplate | The path to the folder containing a template for test projects. | `<GripperCodeTemplate>src\Templates\Code\</GripperCodeTemplate>` |
 
 ## Templates
 You can create your own templates for your solution. Basically a template is a folder which gets transformed to the destination folder.
+The folder must contain a file called ProjectName.csproj.
 The following words can be used in a template and will be replaced:
 | Name | Description |
 | --- | --- |

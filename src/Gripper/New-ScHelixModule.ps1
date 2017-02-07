@@ -41,9 +41,9 @@ function New-ScHelixModule
         
         $moduleName = Read-Host "Please enter the short name of your module (i.e. 'Identity')"   
         
-        if ([string]::IsNullOrEmpty($moduleType) -or  [string]::IsNullOrEmpty($moduleName))
+        if ( [string]::IsNullOrEmpty($moduleName))
         {
-            Write-Error "Module type, name and whether to create a test project are required."
+            Write-Error "Module name is required."
         }
         
         $config = Get-ScProjectConfig
@@ -78,7 +78,7 @@ function New-ScHelixModule
             if($config.GripperTestTemplate) {
                 $testTemplate = Resolve-Path $config.GripperTestTemplate
             }
-            
+
             $testsDir = Join-Path $solutionFolder "src\$moduleType\$moduleName\tests"
             mkdir $testsDir | Out-Null
             $testProjectName =  "$solutionName.$moduleType.$moduleName.Tests"
