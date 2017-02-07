@@ -1,6 +1,10 @@
 # Gripper
 
 
+## 0.6
+* Added possibility to create project templates per solution
+* Removed switch for the test project creation. The test project will always be create except for "Project" modules
+
 ## 0.5
 * No NuGet package is installed anymore. Instead you need to configure which one are installed in Bob.config with the keys `GripperCodeProjectNugetPackages` and `GripperTestProjectNugetPackages` 
 * Renamed Habitat to Helix
