@@ -29,20 +29,16 @@ function New-ScHelixModule
         }
         
         if (!$dte) {
-            
             Write-Error "The script must be executed in the context of Visual Studio solution."
-            
         }
        
-        if ((-not $moduleType -eq 'Feature') -or (-not $moduleType -eq 'Foundation') -or (-not $moduleType -eq 'Project'))
-        {
+        if ((-not $moduleType -eq 'Feature') -or (-not $moduleType -eq 'Foundation') -or (-not $moduleType -eq 'Project')) {
             Write-Warn "Module type should be either 'Feature', 'Foundation' or 'Project'."
         }
         
         $moduleName = Read-Host "Please enter the short name of your module (i.e. 'Identity')"   
         
-        if ( [string]::IsNullOrEmpty($moduleName))
-        {
+        if ( [string]::IsNullOrEmpty($moduleName)) {
             Write-Error "Module name is required."
         }
         
