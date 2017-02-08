@@ -16,12 +16,14 @@ In order to use Gripper call the New-FeatureModule, New-FoundationModule or New-
 
 | Key | Description | Example | 
 | --- | --- |
-| GripperCodeProjectNugetPackages | A list of packages which willd be installed to the code project | `<GripperCodeProjectNugetPackages>` <br> `<Package ID="Unic.Logging.Core" Version="3.5.0" />
-` <br> `</GripperCodeProjectNugetPackages>` |
+| GripperCodeProjectNugetPackages | A list of packages which willd be installed to the code project | `<GripperCodeProjectNugetPackages>` <br> `<Package ID="Unic.Logging.Core" Version="3.5.0" />` <br> `</GripperCodeProjectNugetPackages>` |
 | GripperCodeTemplate | The path to the folder containing a template for code projects. | `<GripperCodeTemplate>src\Templates\Code\</GripperCodeTemplate>` |
-| GripperTestProjectNugetPackages | A list of packages which will be installed to the test project | `<GripperTestProjectNugetPackages>` <br> `<Package ID="NUnit" Version="3.5.0" />
-` <br> `</GripperTestProjectNugetPackages>` |
+| GripperCodeVisualStudioProjectPath | The path to the *proj file inside the project template (default: ProjectName.csproj) | `<GripperCodeVisualStudioProjectPath>ProjectName\ProjectName.xproj</GripperCodeVisualStudioProjectPath>` |
+| GripperTestProjectNugetPackages | A list of packages which will be installed to the test project | `<GripperTestProjectNugetPackages>` <br> `<Package ID="NUnit" Version="3.5.0" />` <br> `</GripperTestProjectNugetPackages>` |
 | GripperTestTemplate | The path to the folder containing a template for test projects. | `<GripperCodeTemplate>src\Templates\Code\</GripperCodeTemplate>` |
+| GripperTestVisualStudioProjectPath | The path to the *proj file inside the project template for the test template (default: ProjectName.csproj) | `<GripperTestVisualStudioProjectPath>ProjectName\ProjectName.xproj</GripperTestVisualStudioProjectPath>` |
+
+
 
 ## Templates
 You can create your own templates for your solution. Basically a template is a folder which gets transformed to the destination folder.
