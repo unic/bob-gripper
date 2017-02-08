@@ -2,7 +2,11 @@
 
 
 ## 0.6
-* Added possibility to create project templates per solution
+* Added possibility to create project templates per solution by adding config keys:
+    * `GripperCodeTemplate`
+    * `GripperCodeVisualStudioProjectPath`
+    * `GripperTestTemplate`
+    * `GripperTestVisualStudioProjectPath`
 * Removed switch for the test project creation. The test project will always be create except for "Project" modules
 
 ## 0.5
