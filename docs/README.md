@@ -1,14 +1,13 @@
-<div class="chapterlogo">![Gripper](Gripper.png)</div>
+<div class="chapterlogo"><img src="./Gripper.png" /></div>
 
 # Gripper
-Gripper is a helper machine used to bootstrap new modules in projects based on our new modular architecture.
 
+Gripper is a helper machine used to bootstrap new modules in projects based on our new modular architecture.
 
 In order to use Gripper call the New-FeatureModule, New-FoundationModule or New-ProjectModule cmdlet without any parameters from your Package Manager Console in Visual Studio. You will be asked three questions:
 
-1. What is the name of your module? It is a plain name of the module, i.e. Identity.
-2. Whether to add a test project to your module? The available options are y (yes) or n (no).
-
+0. What is the name of your module? It is a plain name of the module, i.e. Identity.
+0. Whether to add a test project to your module? The available options are y (yes) or n (no).
 
 **Be careful: Gripper installs nuget packages from both sources - nuget.org and our Unic Team City. They must be present on your package sources list in Visual Studio and the All must be selected for the package sources.**
 
@@ -23,9 +22,8 @@ In order to use Gripper call the New-FeatureModule, New-FoundationModule or New-
 | GripperTestTemplate | The path to the folder containing a template for test projects. | `<GripperCodeTemplate>src\Templates\Code\</GripperCodeTemplate>` |
 | GripperTestVisualStudioProjectPath | The path to the *proj file inside the project template for the test template (default: ProjectName.csproj) | `<GripperTestVisualStudioProjectPath>ProjectName\ProjectName.xproj</GripperTestVisualStudioProjectPath>` |
 
-
-
 ## Templates
+
 You can create your own templates for your solution. Basically a template is a folder which gets transformed to the destination folder.
 The folder must contain a file called ProjectName.csproj.
 The following words can be used in a template and will be replaced:
