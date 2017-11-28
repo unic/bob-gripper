@@ -19,5 +19,5 @@ function ResolvePath() {
 }
 
 Import-Module (ResolvePath "Unic.Bob.Rubble" "tools\Rubble")
-Import-Module (ResolvePath "Unic.Bob.Config" "tools\BobConfig")
+Import-Module (ResolvePath "Unic.Bob.Wendy" "tools\Wendy")
 Import-Module (ResolvePath "Unic.Bob.Trix" "Trix")

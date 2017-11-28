@@ -1,16 +1,17 @@
 <?xml version="1.0"?>
-<package >
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
         <id>Unic.Bob.Gripper</id>
         <authors>Unic AG</authors>
         <version>$VERSION$</version>
         <owners>Unic AG</owners>
-        <iconUrl>https://www.unic.com/img/unic-logo.png</iconUrl>
+        <iconUrl>https://github.com/unic/unic/raw/master/unic_nuget.png</iconUrl>
+    <projectUrl>https://github.com/unic/bob-gripper</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Gripper is responsible for creating new modules in projects.</description>
     </metadata>
     <files>
         <file src="src\**" target="tools" />
-        <file src="packages\**" target="tools\packages" exclude="**\package\services\metadata\core-properties\**;**\Unic.Bob.Keith\**;**\pester\**" />
+        <file src="packages\**" target="tools\packages" exclude="**\package\services\metadata\core-properties\**;**[Content_Types].xml;**\_rels\**;**\Unic.Bob.Keith\**;**\pester\**" />
     </files>
 </package>
