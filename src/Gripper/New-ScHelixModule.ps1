@@ -127,6 +127,20 @@ function New-ScHelixModule
             if($nugetPackages) {
                 InstallNugetPackages $projectName $nugetPackages
             }
+			
+			ExcludeFromBuild("AutomationEngine", $projectName)
+			ExcludeFromBuild("IndexWorker", $projectName)
+			ExcludeFromBuild("XConnect", $projectName)
         }
+		
+        function ExcludeFromBuild($configurationName, $projectName) {		
+			$configuratonConfig = $solutionNode.SolutionBuild.SolutionConfigurations | where Name -eq $configurationName
+			if ($configuratonConfig) {
+				$projectConfig = $configuratonConfig.SolutionContexts | where projectname -like "*$($projectName)*.csproj"
+				if ($projectConfig) {
+					$projectConfig.ShouldBuild = $false
+				}
+			}
+		}
     }
 }
