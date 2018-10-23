@@ -31,14 +31,9 @@ assembly_info:
 
 build_script:
   - cmd: nuget pack %Nuspec_File% -version "%GitVersion_NuGetVersionV2%" -OutputDirectory %Artefact_Output_Dir%
-  - ps: |
-      $ErrorActionPreference = 'Stop';
-      .\generateDocs.ps1
-  - 7z a -r %Artefact_Output_Dir%\docs.zip %APPVEYOR_BUILD_FOLDER%\docs-generated\_book
 
 after_build:
   - cmd: appveyor PushArtifact %Artefact_Output_Dir%\%NuGet_PackageId%.%GitVersion_NuGetVersionV2%.nupkg
-  - cmd: appveyor PushArtifact %Artefact_Output_Dir%\docs.zip
 
 deploy_script:
   - ps: |
@@ -48,5 +43,4 @@ deploy_script:
       }
       if($env:appveyor_repo_tag -eq 'true') {
         Add-Content "$env:USERPROFILE\.git-credentials" "https://$($env:GithubAccessTokenTeamUnic):x-oauth-basic@github.com`n";
-        .\pushDocs.ps1 $env:APPVEYOR_BUILD_FOLDER docs-generated\_book https://github.com/unic/$($env:RepoName).git
       }
